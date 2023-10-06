@@ -24,23 +24,34 @@ I look at three important job posting elements:
 ### Accuracy
 Via a two-step model, which looked at the elements individually, I was able to successfully achieve at least 90% accuracy on all three elements. In a number of cases, the GPT model correctly identified items that I had overlooked during manual inspection. 
 
-* __Part-time Options:__ 96-100% accuracy. The GPT model proved in fact to be superior to the Indeed model, which incorrectly categorized a position with the following statement as part-time: "It is anticipated that the candidate will be willing to work in-person or hybrid out of our office in Barcelona, Spain full-time. However, qualified candidates wishing to telecommute full or part-time and able to work in the European Union or the UK, will be considered on a case-by-case basis." The only ambiguous classification resulted from equivocal information in the job posting, which also a human would be unable to resolve. 
+__Part-time Options:__ 96-100% accuracy. The GPT model proved in fact to be superior to the Indeed model, which incorrectly categorized a position with the following statement as part-time:
+> "It is anticipated that the candidate will be willing to work in-person or hybrid out of our office in Barcelona, Spain full-time. However, qualified candidates wishing to telecommute full or part-time and able to work in the European Union or the UK, will be considered on a case-by-case basis."
 
-* __Salary Ranges:__ 100% accuracy. The salary ranges were very easy for the two-step model to pick up. 
+The score range is due to a ambiguous classification which resulted from equivocal information in the job posting, which also a human would have been unable to resolve. 
 
-* __Company Benefits:__ 92% accuracy. A problem here is that it is difficult to define what exactly a company benefit is. The model classified the following as company benefit: "Young and stimulating work environment - Part-time job (from 8 to 12 hours a week) - Boost your CV: add teaching experience to your skill set." This is somewhat subjective and could even be difficult for a human to classify. The other (also debatable) misclassification as "company benefit" involved the following "Travel expenses reimbursed and accommodation provided - Seasonal position with work offered on a tour-by-tour basis - Salary range of 900.00€ - 1,500.00€ per week". These examples illustrate that, for such feature extraction / classification tasks involving natural language, it is necessary to use very precise definitions or otherwise accept a level of ambiguity. 
+__Salary Ranges:__ 100% accuracy. The salary ranges were very easy for the two-step model to pick up. 
 
-The initial list of elements also included the element "candidate requirements". Here, there were some cases where the second API request rejected the "candidate requirements" extracted in the first step. However, the vast majority of job postings (>90%) feature candidate requirements, making it more difficult to have a balanced set of sample data. I therefore opted to check for "part time options" instead, for which it was easier to find examples with and without. For this final list of elements, a one-step model focused on the individual elements might also suffice. However, it can be useful to maintain the two-step process, as the prompt templates are extremely flexible and can also be used to search for additional and/or more specifc elements such as pet-friendly offices, university degree requirements, application processes, etc.
+__Company Benefits:__ 92% accuracy. A problem here is that it is difficult to define what exactly a company benefit is. The model classified the following as company benefit:  
+> "Young and stimulating work environment - Part-time job (from 8 to 12 hours a week) - Boost your CV: add teaching experience to your skill set."
+ 
+This is somewhat subjective and could even be difficult for a human to classify. The other (also debatable) misclassification as "company benefit" involved the following:
+> "Travel expenses reimbursed and accommodation provided - Seasonal position with work offered on a tour-by-tour basis - Salary range of 900.00€ - 1,500.00€ per week".  
+
+These examples illustrate that, for such feature extraction / classification tasks involving natural language, it is necessary to use very precise definitions or otherwise accept a level of ambiguity. 
+
+The initial list of elements also included the element "candidate requirements". Here, there were some cases where the second API request rejected the "candidate requirements" extracted in the first step. However, the vast majority of job postings (>90%) feature candidate requirements, making it more difficult to have a balanced set of sample data. I therefore opted to check for "part time options" instead, for which it was easier to find examples with and without.  
+
+For this final list of elements, a one-step model focused on the individual elements might also suffice. However, it can be useful to maintain the two-step process, as the prompt templates are extremely flexible and can also be used to search for additional and/or more specifc elements such as pet-friendly offices, university degree requirements, application processes, etc.
 
 ### Costs
 The average job posting in the samples had a length of approx. 3440 characters, which amounts to around 800 tokens. Including the prompts and the API outputs, the number of tokens was around 860. While the price of output tokens is slightly higher than that of input tokens, output tokens in most cases account for a small fraction of the tokens generated in the process. Using the gpt-3.5.-turbo model, the average cost per posting is therefore still below 0.0015 USD. For 1 million job postings, this amounts to around US$ 1230. Through chunking, NLP methods, prompt adjustments and other optimizations which reduce the number of tokens submitted to the API, this figure can be further reduced.
 
 ### Advantages & Disadvantages
 Using an LLM like GPT to address this type of problem brings several advantages:
-- no model training, only prompt engineering. The iteration cycles are much shorter, so that a decent model can be created in 1-2 days.
+- no model training, only prompt engineering. The iteration cycles are much shorter, so that a decent model can be created in 1-2 days, or even (with some practice) in a few hours.
 - multilingual capabilities. The sample dataset, consisting of job postings from the Barcelona area, included a few job postings which are partially in Spanish. The results show that the model is able to correctly extract and classify elements _even if they are in a language other than the prompt, and without explicit instruction_. This is incredibly useful for markets where multiple languages are spoken.
 
-Disadvantages of using the OpenAI GPT API include latency, rate limits and reliability. During experimentation, the process was interrupted on multiple occassions due to ServerUnavailable Errors. For an application which requires high availability and getting lots of results quickly, creating an in-house model is (for the moment) still going to be the better solution. However, the gathering of training data can be significantly supported by a model such as this one.
+Disadvantages of using the OpenAI GPT API include latency, rate limits and reliability. During experimentation, the process was interrupted on multiple occassions due to ServerUnavailable Errors. For an application which requires high availability and getting lots of results quickly, creating an in-house model is (for the moment) still going to be the better solution (which could include a fine-tuned open-source LLM). However, the gathering of training data can be significantly supported by a model such as this one.
 
 ## Approach
 
