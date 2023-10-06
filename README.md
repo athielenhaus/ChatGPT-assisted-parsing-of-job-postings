@@ -12,7 +12,7 @@ Furthermore, the job portal can use such features to create an ML model which pr
 
 ## Objective
 
-The aim is to create a Python program which extracts features from job postings and determines whether these can be considered "key" features. The model should have a 90% accuracy. This is achieved by using the OpenAI API in combination with prompt engineering.
+For this project we focus on the second part of the business case mentioned above. The aim is to create a model or program which, as a first step, determines whether or not the job posting contains certain important job posting elements. This classification model should have a minimum 90% accuracy. This is achieved by using the OpenAI API in combination with prompt engineering.
 
 I look at three important job posting elements:
 - candidate requirements (ex: university degree, Python skills, project management experience, etc.)
@@ -30,6 +30,12 @@ To achieve the objective, the following steps were necessary:
 ### Get sample data
 
 In a first step, I collected 20 English-language job postings from Indeed and saved them in a Google Sheets file. I visually inspected each posting and determined whether the posting contained the elements mentioned above. For each of the three elements, I created a column with boolean values ("1" if the element is present, "0" if not). I downloaded this sheet as a CSV file in order to easily upload it to Google Colab.
+
+### Determine performance measurement
+
+The question which the model attempts to answer is: "Does the job posting include job requirements / salary range / company benefit, yes or no?"
+Since it is a classification problem, using accuracy in combination with a confusion matrix is an appropriate method to measure performance. 
+Due to LLM tendency to hallucinate, we can also consider False-Positive Rate (FPR) in particular.
 
 ### Prompt Engineering
 
