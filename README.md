@@ -21,9 +21,11 @@ I look at three important job posting elements:
 
 ## Results
 
-The two-step model successfully achieved at least 90% accuracy on all three elements.
+The two-step model successfully achieved at least 90% accuracy on all three elements.  
+
 __Salary extraction:__ 100% accuracy. The salary ranges were very easy for the two-step model to pick up. 
-__Company benefits:__ 90% accuracy. A problem here is that it is difficult to define what exactly a company benefit is. The model classified the following as company benefits: "Competitive and fair compensation with a bonus structure - Benefit package - Development plan and personalized career path". This is highly subjective and would even be difficult for a human to classify. The other (also somewhat debatable) misclassification as "company benefits" involved the following "Travel expenses reimbursed and accommodation provided - Seasonal position with work offered on a tour-by-tour basis - Salary range of 900.00€ - 1,500.00€ per week". These examples illustrate that, for such feature extraction / classification tasks involving natural language, it is necessary to use very precise definitions or otherwise accept a level of ambiguity.
+
+__Company benefits:__ 90% accuracy. A problem here is that it is difficult to define what exactly a company benefit is. The model classified the following as company benefits: "Competitive and fair compensation with a bonus structure - Benefit package - Development plan and personalized career path". This is highly subjective and would even be difficult for a human to classify. The other (also debatable) misclassification as "company benefits" involved the following "Travel expenses reimbursed and accommodation provided - Seasonal position with work offered on a tour-by-tour basis - Salary range of 900.00€ - 1,500.00€ per week". These examples illustrate that, for such feature extraction / classification tasks involving natural language, it is necessary to use very precise definitions or otherwise accept a level of ambiguity.
 
 
 The average job posting in the samples had a length of 3370 characters, which amounts to around 800 tokens. Including the prompts and the API outputs, the number of tokens was around 860. While the price of output tokens is slightly higher than that of input tokens, output tokens in most cases account for a small fraction of the tokens generated in the process. Using the gpt-3.5.-turbo model, the average cost per posting is therefore still below 0.0015 USD. For 1 million job postings, this amounts to around US$ 1230. Through NLP methods, such as removing punctuation, spaces, etc. and other optimization, this figure can presumably be further reduced.
