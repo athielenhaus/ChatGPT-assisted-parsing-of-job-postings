@@ -15,21 +15,23 @@ Furthermore, the job portal can use such features to create an ML model which pr
 For this project we focus on the second part of the business case mentioned above. The aim is to create a model or program which, as a first step, determines whether or not the job posting contains certain important job posting elements. This classification model should have a minimum 90% accuracy. The toolkit is the OpenAI GPT API in combination with prompt engineering.
 
 I look at three important job posting elements:
-- candidate requirements (ex: university degree, Python skills, project management experience, etc.)
+- part time option (i.e. the position can be done part-time)
 - salary range (ex: 50,000 - 60,000 euros, $20 per hour, etc.)
 - company benefits (ex: company car, device, gym membership, insurance, etc.)
 
 ## Results
 
 ### Accuracy
-The two-step model successfully achieved at least 90% accuracy on all three elements.  
+Via a two-step model, I was able to successfully achieve at least 90% accuracy on all three elements. In a number of cases, the GPT model identified items that I had overlooked during manual inspection. 
 
-__Salary extraction:__ 100% accuracy. The salary ranges were very easy for the two-step model to pick up. 
+* __Part-time Options:__ 96-100% accuracy. The GPT model proved in fact to be superior to the Indeed model, which incorrectly categorized a position with the following statement as part-time: "It is anticipated that the candidate will be willing to work in-person or hybrid out of our office in Barcelona, Spain full-time. However, qualified candidates wishing to telecommute full or part-time and able to work in the European Union or the UK, will be considered on a case-by-case basis." The only ambiguous classification resulted from equivocal information in the job posting, which also a human would be unable to resolve. 
 
-__Company benefits:__ 90% accuracy. A problem here is that it is difficult to define what exactly a company benefit is. The model classified the following as company benefits: "Competitive and fair compensation with a bonus structure - Benefit package - Development plan and personalized career path". This is highly subjective and would even be difficult for a human to classify. The other (also debatable) misclassification as "company benefits" involved the following "Travel expenses reimbursed and accommodation provided - Seasonal position with work offered on a tour-by-tour basis - Salary range of 900.00€ - 1,500.00€ per week". These examples illustrate that, for such feature extraction / classification tasks involving natural language, it is necessary to use very precise definitions or otherwise accept a level of ambiguity.
+* __Salary Ranges:__ 100% accuracy. The salary ranges were very easy for the two-step model to pick up. 
+
+* __Company Benefits:__ 92% accuracy. A problem here is that it is difficult to define what exactly a company benefit is. The model classified the following as company benefit: "Young and stimulating work environment - Part-time job (from 8 to 12 hours a week) - Boost your CV: add teaching experience to your skill set." This is somewhat subjective and could even be difficult for a human to classify. The other (also debatable) misclassification as "company benefit" involved the following "Travel expenses reimbursed and accommodation provided - Seasonal position with work offered on a tour-by-tour basis - Salary range of 900.00€ - 1,500.00€ per week". These examples illustrate that, for such feature extraction / classification tasks involving natural language, it is necessary to use very precise definitions or otherwise accept a level of ambiguity. 
 
 ### Costs
-The average job posting in the samples had a length of 3370 characters, which amounts to around 800 tokens. Including the prompts and the API outputs, the number of tokens was around 860. While the price of output tokens is slightly higher than that of input tokens, output tokens in most cases account for a small fraction of the tokens generated in the process. Using the gpt-3.5.-turbo model, the average cost per posting is therefore still below 0.0015 USD. For 1 million job postings, this amounts to around US$ 1230. Through NLP methods, such as removing punctuation, spaces, etc. and other optimization, this figure can presumably be further reduced.
+The average job posting in the samples had a length of 3440 characters, which amounts to around 800 tokens. Including the prompts and the API outputs, the number of tokens was around 860. While the price of output tokens is slightly higher than that of input tokens, output tokens in most cases account for a small fraction of the tokens generated in the process. Using the gpt-3.5.-turbo model, the average cost per posting is therefore still below 0.0015 USD. For 1 million job postings, this amounts to around US$ 1230. Through chunking, NLP methods (removing punctuation, spaces, etc.), prompt adjustments and other optimization, this figure can presumably be further reduced.
 
 ### Advantages & Disadvantages
 Using an LLM like GPT to address this type of problem brings several advantages:
