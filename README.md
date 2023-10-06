@@ -30,10 +30,10 @@ Via a two-step model, which looked at the elements individually, I was able to s
 
 * __Company Benefits:__ 92% accuracy. A problem here is that it is difficult to define what exactly a company benefit is. The model classified the following as company benefit: "Young and stimulating work environment - Part-time job (from 8 to 12 hours a week) - Boost your CV: add teaching experience to your skill set." This is somewhat subjective and could even be difficult for a human to classify. The other (also debatable) misclassification as "company benefit" involved the following "Travel expenses reimbursed and accommodation provided - Seasonal position with work offered on a tour-by-tour basis - Salary range of 900.00€ - 1,500.00€ per week". These examples illustrate that, for such feature extraction / classification tasks involving natural language, it is necessary to use very precise definitions or otherwise accept a level of ambiguity. 
 
-The initial list of elements also included the element "candidate requirements". Here, there were some cases where the second API request rejected the "candidate requirements" extracted in the first step. However, the vast majority of job postings (>90%) feature candidate requirements, making it more difficult to have a balanced set of sample data. I therefore opted to check for "part time options" instead, for which it was easier to find examples. With this final list of elements, a one-step model focused on the individual elements might also suffice. However, it could be useful to maintain the two-step process, as the prompt templates are extremely flexible and can also be used to search for additional and/or more specifc elements such as pet-friendly offices, university degree requirements, etc.
+The initial list of elements also included the element "candidate requirements". Here, there were some cases where the second API request rejected the "candidate requirements" extracted in the first step. However, the vast majority of job postings (>90%) feature candidate requirements, making it more difficult to have a balanced set of sample data. I therefore opted to check for "part time options" instead, for which it was easier to find examples with and without. For this final list of elements, a one-step model focused on the individual elements might also suffice. However, it can be useful to maintain the two-step process, as the prompt templates are extremely flexible and can also be used to search for additional and/or more specifc elements such as pet-friendly offices, university degree requirements, application processes, etc.
 
 ### Costs
-The average job posting in the samples had a length of 3440 characters, which amounts to around 800 tokens. Including the prompts and the API outputs, the number of tokens was around 860. While the price of output tokens is slightly higher than that of input tokens, output tokens in most cases account for a small fraction of the tokens generated in the process. Using the gpt-3.5.-turbo model, the average cost per posting is therefore still below 0.0015 USD. For 1 million job postings, this amounts to around US$ 1230. Through chunking, NLP methods, prompt adjustments and other optimizations which reduce the number of tokens submitted to the API, this figure can be further reduced.
+The average job posting in the samples had a length of approx. 3440 characters, which amounts to around 800 tokens. Including the prompts and the API outputs, the number of tokens was around 860. While the price of output tokens is slightly higher than that of input tokens, output tokens in most cases account for a small fraction of the tokens generated in the process. Using the gpt-3.5.-turbo model, the average cost per posting is therefore still below 0.0015 USD. For 1 million job postings, this amounts to around US$ 1230. Through chunking, NLP methods, prompt adjustments and other optimizations which reduce the number of tokens submitted to the API, this figure can be further reduced.
 
 ### Advantages & Disadvantages
 Using an LLM like GPT to address this type of problem brings several advantages:
@@ -64,7 +64,7 @@ Due to LLM tendency to hallucinate, we can also consider False-Positive Rate (FP
 
 The first attempt involved creating a single, zero-shot prompt which instructed the LLM to determine the presence of all the elements with a single API request. 
 
-Since the accuracy was poor, I iterated and gradually increased the complexity of the prompt template to include multiple examples:
+Since the accuracy was poor, I iterated and gradually increased the complexity and finally arrived at a multi-shot prompt template:
 
 <pre>
   sample_prompt = f'''Determine if the job description below contains examples of the following elements:
@@ -95,6 +95,8 @@ Second approach:
 For each of the three elements:
 - Step 1: extract and list features
 - Step 2: analyze features
+
+One of my primary objectives in crafting the prompts was to ensure that they were flexible. I therefore created prompts which take only the desired "element" and the to-be-inspected job description as arguments (see below).
 
 <pre>
   # Extraction Prompt
