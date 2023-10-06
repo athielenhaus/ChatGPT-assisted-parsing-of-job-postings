@@ -99,7 +99,7 @@ For each of the three elements:
 One of my primary objectives in crafting the prompts was to ensure that they were flexible. I therefore created prompts which take only the desired "element" and the to-be-inspected job description as arguments (see below).
 
 <pre>
-  # Extraction Prompt
+  # EXTRACTION & LISTING PROMPT
 
   element = "salary range"
   
@@ -115,7 +115,8 @@ One of my primary objectives in crafting the prompts was to ensure that they wer
   ###
   '''
   
-  # Analysis prompt (takes as an argument the API response to previous prompt)
+  # ANALYSIS PROMPT (takes as an argument the API response to previous prompt)
+  
   final_prompt = f'''Given the following phrases, please determine if they include specific {element}s commonly found in a job postings.
     Respond with "1" if yes, "0" if no.
   
