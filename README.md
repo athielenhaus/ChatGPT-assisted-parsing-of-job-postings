@@ -22,13 +22,15 @@ I look at three important job posting elements:
 ## Results
 
 ### Accuracy
-Via a two-step model, I was able to successfully achieve at least 90% accuracy on all three elements. In a number of cases, the GPT model identified items that I had overlooked during manual inspection. 
+Via a two-step model, which looked at the elements individually, I was able to successfully achieve at least 90% accuracy on all three elements. In a number of cases, the GPT model correctly identified items that I had overlooked during manual inspection. 
 
 * __Part-time Options:__ 96-100% accuracy. The GPT model proved in fact to be superior to the Indeed model, which incorrectly categorized a position with the following statement as part-time: "It is anticipated that the candidate will be willing to work in-person or hybrid out of our office in Barcelona, Spain full-time. However, qualified candidates wishing to telecommute full or part-time and able to work in the European Union or the UK, will be considered on a case-by-case basis." The only ambiguous classification resulted from equivocal information in the job posting, which also a human would be unable to resolve. 
 
 * __Salary Ranges:__ 100% accuracy. The salary ranges were very easy for the two-step model to pick up. 
 
 * __Company Benefits:__ 92% accuracy. A problem here is that it is difficult to define what exactly a company benefit is. The model classified the following as company benefit: "Young and stimulating work environment - Part-time job (from 8 to 12 hours a week) - Boost your CV: add teaching experience to your skill set." This is somewhat subjective and could even be difficult for a human to classify. The other (also debatable) misclassification as "company benefit" involved the following "Travel expenses reimbursed and accommodation provided - Seasonal position with work offered on a tour-by-tour basis - Salary range of 900.00€ - 1,500.00€ per week". These examples illustrate that, for such feature extraction / classification tasks involving natural language, it is necessary to use very precise definitions or otherwise accept a level of ambiguity. 
+
+The initial list of elements also included the element "candidate requirements". Here, there were some cases where the second API request rejected the "candidate requirements" extracted in the first step. However, the vast majority of job postings (>90%) feature candidate requirements, making it more difficult to have a balanced set of sample data. I therefore opted to check for "part time options" instead, for which it was easier to find examples. With this final list of elements, a one-step model focused on the individual elements might also suffice. However, it could be useful to maintain the two-step process, as the prompt templates are extremely flexible and can also be used to search for additional and/or more specifc elements such as pet-friendly offices, university degree requirements, etc.
 
 ### Costs
 The average job posting in the samples had a length of 3440 characters, which amounts to around 800 tokens. Including the prompts and the API outputs, the number of tokens was around 860. While the price of output tokens is slightly higher than that of input tokens, output tokens in most cases account for a small fraction of the tokens generated in the process. Using the gpt-3.5.-turbo model, the average cost per posting is therefore still below 0.0015 USD. For 1 million job postings, this amounts to around US$ 1230. Through chunking, NLP methods (removing punctuation, spaces, etc.), prompt adjustments and other optimization, this figure can presumably be further reduced.
@@ -50,11 +52,11 @@ To achieve the objective, the following steps were necessary:
 
 ### Get sample data
 
-In a first step, I collected 20 English-language job postings from Indeed and saved them in a Google Sheets file. I visually inspected each posting and determined whether the posting contained the elements mentioned above. For each of the three elements, I created a column with boolean values ("1" if the element is present, "0" if not). I downloaded this sheet as a CSV file in order to easily upload it to Google Colab.
+In a first step, I collected 25 English-language job postings from Indeed and saved them in a Google Sheets file. I visually inspected each posting and determined whether the posting contained the elements mentioned above. For each of the three elements, I created a column with boolean values ("1" if the element is present, "0" if not). I downloaded this sheet as a CSV file in order to easily upload it to Google Colab.
 
 ### Determine performance measurement
 
-The question which the model attempts to answer is: "Does the job posting include job requirements / salary range / company benefit, yes or no?"
+The question which the model attempts to answer is: "Does the job posting include part-time options / salary range / company benefit, yes or no?"
 Since it is a classification problem, using accuracy in combination with a confusion matrix is an appropriate method to measure performance. 
 Due to LLM tendency to hallucinate, we can also consider False-Positive Rate (FPR) in particular.
 
@@ -91,11 +93,14 @@ However, the model continued to falsely indicate the presence of "salary range" 
 Second approach:
 
 For each of the three elements:
-- Step 1: extract features
+- Step 1: extract and list features
 - Step 2: analyze features
 
 <pre>
   # Extraction Prompt
+
+  element = "salary range"
+  
   sample_prompt = f'''Does the job description located between the triple hashtags below mention any {element}s?
   If yes, list maximum 3, using maximum 8 words for each. If no, write "no element detected". 
   Desired output format is a list:
@@ -118,6 +123,8 @@ For each of the three elements:
     '''
 </pre>
 
-This approach improved performance.
+The diagram below describes the utilized approach.  
+
+<img src="images/model_diagram.png" alt="model diagram" width="700"/>  
 
 
