@@ -19,7 +19,7 @@ I look at three important job posting elements:
 - salary range (ex: 50,000 - 60,000 euros, $20 per hour, etc.)
 - company benefits (ex: company car, device, gym membership, insurance, etc.)
 
-# Approach
+## Approach
 
 To achieve the objective, the following steps were necessary:
 - get sample data
@@ -29,7 +29,7 @@ To achieve the objective, the following steps were necessary:
 
 ### Get sample data
 
-In a first step, I collected 20 English-language job postings from Indeed and saved them in a Google Sheets file. I visually inspected each posting and determined whether the posting contained the elements mentioned above. For each element, I created a column with boolean values ("1" if the element is present, "0" if not). I downloaded this sheet as a CSV file in order to easily upload it to Google Colab.
+In a first step, I collected 20 English-language job postings from Indeed and saved them in a Google Sheets file. I visually inspected each posting and determined whether the posting contained the elements mentioned above. For each of the three elements, I created a column with boolean values ("1" if the element is present, "0" if not). I downloaded this sheet as a CSV file in order to easily upload it to Google Colab.
 
 ### Prompt Engineering
 
