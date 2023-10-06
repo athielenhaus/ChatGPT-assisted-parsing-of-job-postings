@@ -8,7 +8,7 @@ This project is inspired by the Indeed online job portal, which has a feature th
 
 For job portals, being able to extract key features from lengthy job postings can be very useful. The prominent display of salary ranges, company benefits and work conditions can help job portal users quickly decide whether a job posting is of interest to them, thereby allowing them to save time and improving their overall experience.  
 
-Furthermore, the job portal can use such features to create an ML model which predicts the popularity of job postings (user engagement in the form of clicks, saves, shares etc.) based on their features. The portal can use this to provide constructive feedback to employers who use the portal to list their open positions.  
+Furthermore, the job portal can use such features to create an ML model which predicts the popularity of job postings (user engagement in the form of clicks, saves, shares etc.). The portal can use this to provide constructive feedback to employers who use the portal to list their open positions.  
 
 ## Objective
 
