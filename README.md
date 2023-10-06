@@ -59,9 +59,11 @@ Since the accuracy was poor, I iterated and gradually increased the complexity o
   '''
 </pre>
 
-However, the model continued to falsely indicate the presence of "salary range" and "company benefits" if the posting contained a statement such as "The position includes an attractive salary range and benefits". I therefore decided that a multi-step process might be easier, without significantly increasing costs.
+However, the model continued to falsely indicate the presence of "salary range" and "company benefits" if the posting contained a statement such as "The position includes an attractive salary range and benefits". I therefore decided that a multi-step process focusing on each element individually might be easier, without significantly increasing costs, as it would allow for simpler prompts.
 
 Second approach:
+
+For each of the three elements:
 - Step 1: extract features
 - Step 2: analyze features
 
